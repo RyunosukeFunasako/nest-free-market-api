@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
 import { Item } from './item.model';
 import { ItemsService } from './items.service';
-import { ItemStatus } from './item-status.enum';
+import { CreateItemDto } from './dto/create-item.dto';
 
 @Controller('items')
 export class ItemsController {
@@ -24,22 +24,8 @@ export class ItemsController {
 
     @Post()
     // リクエストボディから商品のパラメータを取得する
-    create(@Body('id') id: string,
-           @Body('name') name: string,
-           @Body('price') price: number,
-           @Body('description') description: string,
-           // statusは作成と同時に売り切れになることはないので、パラメータで受け取る必要がない
-    ): Item {
-        // Itemオブジェクトの作成
-        // キーと変数の名前が同じなので省略できる
-        const item: Item = {
-            id,
-            name,
-            price,
-            description,
-            status: ItemStatus.ON_SALE,
-        };
-        return this.itemsService.create(item);
+    create(@Body() createItemDto: CreateItemDto): Item {
+        return this.itemsService.create(createItemDto);
     }
 
     @Patch(':id')
