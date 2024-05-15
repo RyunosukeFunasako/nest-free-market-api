@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, ParseUUIDPipe } from '@nestjs/common';
 import { Item } from './item.model';
 import { ItemsService } from './items.service';
 import { CreateItemDto } from './dto/create-item.dto';
@@ -17,7 +17,7 @@ export class ItemsController {
     @Get(':id')
     // パラメータをメソッド側で取得するために@Paramデコレーターを使う
     // 引数にキーを指定し、変数を定義する
-    findById(@Param('id') id: string): Item {
+    findById(@Param('id', ParseUUIDPipe) id: string): Item {
         // serviceのメソッドにidを渡す
         return this.itemsService.findById(id)
     }
@@ -29,12 +29,12 @@ export class ItemsController {
     }
 
     @Patch(':id')
-    updateStatus(@Param('id') id: string): Item {
+    updateStatus(@Param('id', ParseUUIDPipe) id: string): Item {
         return this.itemsService.updateStatus(id);
     }
 
     @Delete(':id')
-    delete(@Param('id') id: string): void {
+    delete(@Param('id', ParseUUIDPipe) id: string): void {
         return this.itemsService.delete(id);
     }
 }
